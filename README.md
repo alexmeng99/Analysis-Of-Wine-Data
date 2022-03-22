@@ -2,16 +2,20 @@
 ## Analysis of Wine Data
 *********
 
+Abner Espinoza
+Edward Wu
+Alexandria Meng
+
 # Abstract
 
 It’s no secret that everything from sugar to acidity affects the taste and quality of food, but namely wine. With the given dataset, we set out to determine if we could predict both the quality of the given wines and the type of wine (red or white) using various machine learning models. This project provides a graphical and statistical analysis of the Wine Quality Data Set provided to us by the UCI Machine Learning Repository. 
 
-##Data Exploration
+## Data Exploration
 #1.1 Understanding the Data
 
 First, we decided to look into what problems we could solve based on what the data looks like. Since the data is tabular, we brainstormed that Decision Trees could yield positive results and point us in the right direction. As we’re primarily interested with how close our predictions are to the actual values, we further presumed that an error metric such as Mean Squared Error (MSE) would best help us assess the accuracy of our models and allow us to compare them to one other. We also used Standard Error as an overarching benchmark. Lastly, we shuffled the data and split it into training and testing data at a 75:25 rate.
 
-#1.2 Visualizing the Data
+# 1.2 Visualizing the Data
 
 To grant a better understanding of the Wine Data, we plotted multiple scatter plots and histograms (not all shown below) in order to examine how the features compared against Quality, as well as how many data points were in each feature. This allowed us to see each feature’s range.
    
@@ -27,11 +31,11 @@ To grant a better understanding of the Wine Data, we plotted multiple scatter pl
     Figure 1: Quality compared to Fixed Acidity (Red)		 Figure 2: Quality compared to Fixed Acidity (White)
 Next, we compared features to one another to detect if there were patterns or relationships we could pick up by eye. Namely, we were looking for positive, linear relationships. This was in the hopes that these features would provide more insight as we performed model exploration. We chose two combinations that we found to have these types of relationships: Alcohol & pH, and Chlorides & Density. As a result of this, we believed that using Dimensionality Reduction with these features would be the right place to start. With two models at hand (Decision Trees and Dimensionality Reduction) we concluded this aspect of data exploration and moved onto model exploration, which itself would help us to further understand the data.
 
-##Model Exploration
-#2.1 Dimensionality Reduction
+## Model Exploration
+# 2.1 Dimensionality Reduction
 
 Using the aforementioned features (Alcohol & pH, and Chlorides & Density), we used Dimensionality Reduction to determine if wine quality could be predicted. There was only one parameter that we considered:
-n_components- desired dimensions in the output of the transform.
+- n_components- desired dimensions in the output of the transform.
 
 When using the Alcohol & pH features against Quality, an average Standard Error of 43% was calculated using the Principal Component Analysis (PCA) and Linear Discriminant Analysis (LDA) models. Both models had their n_components parameters set to 1 (since there are only two features), and both MSEs were recorded to be around 0.96. With the Density & Chlorides features, the average Standard Error was 41% for both PCA and LDA, with their n_components set to 1, and with an MSE of about 1.05 for both models. This showed us that linear relationships between features didn’t accurately map to Quality.
 
@@ -39,22 +43,22 @@ Taking into consideration all the features of the data (barring Quality), we fou
 
 This means that, on average, our Quality predictions were nearly a full point off of the actual Quality value. However, this showed us that using all the features was an improvement from focusing on just the linearly correlated features. As a result, we changed our processes to include all of the features rather than isolating them. For this dataset, we quickly found that taking into account more features yields better results.
 
-2.2 Random Forest Classifier (RFC)
+## 2.2 Random Forest Classifier (RFC)
 
 Before we experimented with RFCs, we ran a simple Decision Tree on our data. Using mltools, we iterated from 1-100 for both the minParent and minLeaf parameters and from 1-15 for the maxDepth parameter. For the red wine, we were able to achieve an MSE of 0.5094 by setting minParent to 1, minLeaf to 6, and maxDepth to 6. For the white wine, we achieved an MSE of 0.6217 by setting minParent to 2, minLeaf to 7, and maxDepth to 5.  
 
 We decided that taking an ensemble method that involves bagging would work well given our optimistic findings using the Decision Trees. In short, RFCs create a number of trees and the ultimate prediction is decided by committee. Therefore, it is impossible to memorize the training data and this prevents overfitting. For this model, we emphasized exploration of the Red Wine data.
 
 Using Scikit Learn’s Random Forest Classifier ensemble package, there were a few parameters to consider:
-n_estimators- number of trees in the forest.
-Criterion- “gini” or “entropy.”
-Max_depth- maximum depth in a tree.
-Min_samples_split- The minimum number of samples required to split an internal node.
-Min_samples_leaf- The minimum number of samples required to be at a leaf node.
+- n_estimators- number of trees in the forest.
+- Criterion- “gini” or “entropy.”
+- Max_depth- maximum depth in a tree.
+- Min_samples_split- The minimum number of samples required to split an internal node.
+- Min_samples_leaf- The minimum number of samples required to be at a leaf node.
 	
 To determine the hyperparameters that would produce the most accurate results, we varied the values in an attempt to minimize the MSE. We used similar ranges to what we’ve previously experienced working with.
 
-
+<img width="=931" alt="Screen Shot 2021-12-10 at 2 54 00 PM" src="https://cdn.discordapp.com/attachments/766599919813263361/955907106589012008/unknown.png">
 
 
           Figure 1: varying the number of 	        Figure 2: varying the maximum 
@@ -64,12 +68,12 @@ Using these MSE values, we determined the hyperparameter values that most optimi
 
 Using the same parameters, we also trained a model to predict whether a certain wine was red or white based on the features. Our RFC achieved a Standard Error of 99.54% in predicting between red and white wine.
 
-2.3 Neural Network
+## 2.3 Neural Network
 
 Next, we used Scikit Learn’s neural network package for their Multi-Layer Perceptron model. There were three hyperparameters to consider:
-solver- function for weight optimization.
-hidden_layer_sizes- the number of hidden layers and neurons per layer.
-alpha- L2 penalty.
+- solver- function for weight optimization.
+- hidden_layer_sizes- the number of hidden layers and neurons per layer.
+- alpha- L2 penalty.
 
 By again using GridSearchCV, we were able to refine and narrow the parameters of the network down to
 For the red wine — setting solver to ‘adam’ (a stochastic gradient-based optimizer), alpha to 0.00001, and hidden_layers to 10, 4.
@@ -77,7 +81,7 @@ For the white wine — setting solve to ‘adam’, alpha to 0.00001, and hidden
 
 Using these parameters, we were able to achieve an MSE of 0.7775 for the red wine and 0.7625 for the white wine. To further prospect the data, we decided to use the mltools package alongside Scikit Learn. We varied the number of hidden layers from 5 to 30 and the number of nodes from 1 to 64. Using this method, we were able to achieve an MSE of 0.915 for the red wine. After comparing the results for the red wine between Scikit Learn and mltools, we decided the latter method was not worth pursuing further.
 
-2.3 Support Vector Machine (SVM)
+## 2.3 Support Vector Machine (SVM)
 
 For our last model, we realized that using Support Vector Machines for classification would be effective, especially if we could use Kernel tricks to map the features to a higher dimension. Using the Radial Basis function kernel, we were able to minimize the MSE to 0.4531. Other kernel functions such as linear, polynomial, and sigmoid yielded 0.5063, 0.4688, 0.625 respectively. By varying the hyperparameters, we managed to improve our model and lower the MSE to 0.45. We also utilized the confusion matrix and classification report from Scikit Learn to further analyze the accuracy of our predictions.
 
@@ -97,7 +101,7 @@ Dimensionality Reduction was handled by Alex, Random Forests and SVMs by Edward,
 
 
 
-
+*********
 
       References
        [1] https://archive.ics.uci.edu/ml/datasets/Wine+Quality       
