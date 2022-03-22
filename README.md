@@ -11,7 +11,7 @@ Alexandria Meng
 It’s no secret that everything from sugar to acidity affects the taste and quality of food, but namely wine. With the given dataset, we set out to determine if we could predict both the quality of the given wines and the type of wine (red or white) using various machine learning models. This project provides a graphical and statistical analysis of the Wine Quality Data Set provided to us by the UCI Machine Learning Repository. 
 
 ## Data Exploration
-#1.1 Understanding the Data
+# 1.1 Understanding the Data
 
 First, we decided to look into what problems we could solve based on what the data looks like. Since the data is tabular, we brainstormed that Decision Trees could yield positive results and point us in the right direction. As we’re primarily interested with how close our predictions are to the actual values, we further presumed that an error metric such as Mean Squared Error (MSE) would best help us assess the accuracy of our models and allow us to compare them to one other. We also used Standard Error as an overarching benchmark. Lastly, we shuffled the data and split it into training and testing data at a 75:25 rate.
 
