@@ -61,8 +61,8 @@ To determine the hyperparameters that would produce the most accurate results, w
 <img width="=931" alt="Screen Shot 2021-12-10 at 2 54 00 PM" src="https://cdn.discordapp.com/attachments/766599919813263361/955907106589012008/unknown.png">
 
 
-          Figure 1: varying the number of 	        Figure 2: varying the maximum 
-     		        estimators for 100-1200.  		     depth  for 1-30.
+          Figure 1: varying the number of 	                           Figure 2: varying the maximum 
+     		    estimators for 100-1200.  		                             depth  for 1-30.
 
 Using these MSE values, we determined the hyperparameter values that most optimize the performance of the RFC. Setting criterion to “entropy”, max_samples to 750, n_estimators to 300, max_depth to 15, min_samples_split to 5, and min_samples_leaf to 2, we managed an MSE of 0.3969. Additionally, using GridSearchCV (which implements cross-validation over a grid of parameters), we were able to determine an even more optimized result by setting max_samples to None, n_estimators to 300, max_depth to 15, min_samples_split to 2, min_samples_leaf to 1, ultimately achieving an MSE of 0.3531.
 
